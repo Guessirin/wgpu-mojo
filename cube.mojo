@@ -1,5 +1,5 @@
 """
-An animated fullscreen fragment-shader example..
+An animated fullscreen fragment-shader example.
 
 The lowest-friction way to play with GPU fragment shaders in wgpu-mojo: the Mojo
 side just opens a window, owns a tiny uniform buffer, and draws one fullscreen
