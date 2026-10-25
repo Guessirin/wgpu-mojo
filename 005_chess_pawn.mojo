@@ -94,7 +94,8 @@ fn sceneSDF(p: vec3<f32>) -> f32 {
 
     let collar1 = sdTorus(p - vec3<f32>(0.0, -1.0, 0.0), vec2<f32>(0.6, 0.1));
 
-    let body = sdCone(p - vec3<f32>(0.0, -0.9, 0.0), vec2<f32>(0.5, 0.86), 1.6);
+    //let body = sdCone(p - vec3<f32>(0.0, -0.9, 0.0), vec2<f32>(0.5, 0.86), 1.6);
+    let body = sdCone(p - vec3<f32>(0.0, -0.4, 0.0), vec2<f32>(0.5, 1.46), 1.6);
 
     let collar2 = sdTorus(p - vec3<f32>(0.0, 0.4, 0.0), vec2<f32>(0.35, 0.06));
 
