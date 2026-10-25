@@ -84,7 +84,7 @@ fn rotateX(v: vec3<f32>, angle: f32) -> vec3<f32> {
 fn shade(frag_coord: vec2<f32>) -> vec3<f32> {
     let uv = (frag_coord * 2.0 - U.resolution.xy) / U.resolution.y;
 
-    let ro = vec3<f32>(2.0, 1.5, 4.5);
+    let ro = vec3<f32>(0.0, 1.5, 4.5);
     let rd = normalize(vec3<f32>(uv, -1.5));
 
     var t = 0.0;
