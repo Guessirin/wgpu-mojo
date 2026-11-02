@@ -97,7 +97,7 @@ fn shade(frag_coord: vec2<f32>) -> vec3<f32> {
 
     let uv = (frag_coord - 0.5 * U.resolution.xy) / U.resolution.y;
 
-    let ro = vec3<f32>(0.0, 0.0, -2.0);
+    let ro = vec3<f32>(0.0, 1.0, -3.2);
     let rd = normalize(vec3<f32>(uv, 1.0));
 
     var t = 0.0;
