@@ -75,8 +75,8 @@ fn sdBox(p: vec2<f32>, b: vec2<f32>) -> f32 {
 
 fn shade(frag_coord: vec2<f32>) -> vec3<f32> {
 
-    let uv = vec2<f32>(frag_coord * 2.0 - U.resolution.xy) / U.resolution.y;
-    let mouse_uv = vec2<f32>(U.mouse * 2.0 - U.resolution.xy) / U.resolution.y;
+    let uv = (frag_coord * 2.0 - U.resolution.xy) / U.resolution.y;
+    let mouse_uv = (U.mouse * 2.0 - U.resolution.xy) / U.resolution.y;
 
     let t = U.time * 1.5;
     var plasma = sin(uv.x * 4.0 + t) + sin(uv.y * 4.0 - t);
