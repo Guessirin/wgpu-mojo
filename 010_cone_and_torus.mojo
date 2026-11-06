@@ -107,6 +107,30 @@ fn calcNormal(p: vec3<f32>) -> vec3<f32> {
 }
 
 fn shade(frag_coord: vec2<f32>) -> vec3<f32> {
+    let uv = frag_coord / U.resolution.xy;
+    let t = U.time;
+
+    // Classic summed-sine plasma.
+    var v = 0.0;
+    v += sin((uv.x * 10.0) + t);
+    v += sin((uv.y * 10.0 + t) * 0.5);
+    v += sin((uv.x * 10.0 + uv.y * 10.0 + t) * 0.5);
+    let cx = uv.x + 0.5 * sin(t * 0.2);
+    let cy = uv.y + 0.5 * cos(t * 0.3);
+    v += sin(sqrt(cx * cx + cy * cy) * 20.0 + t);
+    v = v * 0.5;
+
+    return vec3<f32>(
+        sin(v * 3.14159),
+        sin(v * 3.14159 + 2.09440),
+        sin(v * 3.14159 + 4.18879),
+    ) * 0.5 + vec3<f32>(0.5);
+}
+// ===========================================================================
+@fragment
+fn fs_main(@builtin(position) frag: vec4<f32>) -> @location(0) vec4<f32> {
+    // @builtin(position) is top-left origin; flip Y to bottom-left.
+    let frag_coord = vec2<f32>(frag.x, U.resolution.y - frag.y);
     let uv = (frag_coord.xy * 2.0 - U.resolution.xy) / min(U.resolution.x, U.resolution.y);
 
     var ro = vec3<f32>(0.0, 0.5, -2.5);
@@ -144,15 +168,8 @@ fn shade(frag_coord: vec2<f32>) -> vec3<f32> {
 	let mat_color = 0.5 + 0.5 * cos(U.time + p.xyx + vec3<f32>(0.0, 2.0, 4.0));
 	color = mat_color * (diff + 0.1) + vec3<f32>(spec * 0.4);
     }
-	color = pow(color, vec3<f32>(0.4545));
-	return color;
-}
-// ===========================================================================
-@fragment
-fn fs_main(@builtin(position) frag: vec4<f32>) -> @location(0) vec4<f32> {
-    // @builtin(position) is top-left origin; flip Y to bottom-left.
-    let frag_coord = vec2<f32>(frag.x, U.resolution.y - frag.y);
-    return vec4<f32>(shade(frag_coord), 1.0);
+    color = pow(color, vec3<f32>(0.4545));
+    return vec4<f32>(color, 1.0);
 }
 """
 
