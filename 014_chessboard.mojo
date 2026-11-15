@@ -70,12 +70,15 @@ fn sdBox(p: vec3<f32>, b: vec3<f32>) -> f32 {
 }
 
 fn map(p: vec3<f32>) -> vec2<f32> {
-    let d_board = sdBox(p, vec3<f32>(4.0, 0.2, 4.0));
-    let d_frame = sdBox(p - vec3<f32>(0.0, -0.05, 0.0), vec3<f32>(4.4, 0.18, 4.4));
-    if (d_board < d_frame) {
-        return vec2<f32>(d_board, 1.0);
+    //let frame_d = sdBox(p - vec3<f32>(0.0, -0.22, 0.0), vec3<f32>(4.4, 0.2, 4.4)) - 0.03;
+    let frame_d = sdBox(p - vec3<f32>(0.0, -0.22, 0.0), vec3<f32>(0.4, 0.0, 0.4)) - 0.03;
+
+    let grid_d = sdBox(p - vec3<f32>(0.0, -0.21, 0.0), vec3<f32>(4.0, 0.21, 4.0));
+
+    if (grid_d < frame_d) {
+        return vec2<f32>(grid_d, 2.0);
     }
-    return vec2<f32>(d_frame, 2.0);
+    return vec2<f32>(frame_d, 1.0);
 }
 
 fn calcNormal(p: vec3<f32>) -> vec3<f32> {
@@ -88,47 +91,43 @@ fn calcNormal(p: vec3<f32>) -> vec3<f32> {
 }
 
 fn shade(frag_coord: vec2<f32>) -> vec3<f32> {
-    var uv = (frag_coord * 2.0 - U.resolution.xy) / U.resolution.y;
-    uv.y = -uv.y;
+    let uv = (frag_coord * 2.0 - U.resolution.xy) / U.resolution.y;
 
     let angle = U.time * 0.4;
-    let ro = vec3<f32>(sin(angle) * 9.5, 6.5, cos(angle) * 9.5);
-    let target1 = vec3<f32>(0.0, 0.0, 0.0);
-    let forward = normalize(target1 - ro);
-    let right = normalize(cross(vec3<f32>(0.0, 1.0, 0.0), forward));
-    let up = cross(forward, right);
-    let rd = normalize(forward + uv.x * right + uv.y * up);
+    let ro = vec3<f32>(sin(angle) * 9.0, 6.5, cos(angle) * 9.0);
+    let ta = vec3<f32>(0.0, 0.0, 0.0);
+
+    let ww = normalize(ta - ro);
+    let uu = normalize(cross(ww, vec3<f32>(0.0, 1.0, 0.0)));
+    let vv = cross(uu, ww);
+    let rd = normalize(uv.x * uu + uv.y * vv + 1.5 * ww);
 
     var t = 0.0;
-    var mat_id = 0.0;
+    var mat = 0.0;
     for (var i = 0; i < 100; i++) {
-        let pos = ro + rd * t;
-        let res = map(pos);
-        if (res.x < 0.001) {
-            mat_id = res.y;
+        let res = map(ro + rd * t);
+        if (res.x < 0.001 || t > 30.0) {
+            mat = res.y;
             break;
         }
         t += res.x;
-        if (t > 40.0) { break; }
     }
 
-    var col = vec3<f32>(0.08, 0.10, 0.14);
+    var col = vec3<f32>(0.12, 0.14, 0.18);
 
-   if (mat_id < 0.0) {
+    if (t < 30.0) {
         let pos = ro + rd * t;
-        let n = calcNormal(pos);
-        let light_dir = normalize(vec3<f32>(0.6, 1.0, 0.4));
-        let diff = max(dot(n, light_dir), 0.0) * 0.8 + 0.2;
+        let nor = calcNormal(pos);
+        let light_dir = normalize(vec3<f32>(0.6, 0.9, 0.4));
+        let diff = max(dot(nor, light_dir), 0.0);
 
-        if (mat_id == 1.0) {
-            let cell = floor(pos.xz);
-            let checker = ((i32(cell.x) + i32(cell.y)) & 1) == 0;
-            let albedo = select(vec3<f32>(0.15, 0.15, 0.18), vec3<f32>(0.92, 0.90, 0.85), checker);
-            col = albedo * diff;
-        } else {
-            col = vec3<f32>(0.35, 0.20, 0.10) * diff;
-        }
-       
+        var albedo = vec3<f32>(0.25, 0.14, 0.08);
+        if (mat > 1.5) {
+            let tile = floor(pos.xz + vec2<f32>(4.0));
+            let checker = abs((tile.x + tile.y) % 2);
+            albedo = mix(vec3<f32>(0.92, 0.88, 0.80), vec3<f32>(0.18, 0.20, 0.24), checker);
+        } 
+        col = albedo * (diff * 0.85 + 0.2);
     }
     
     return pow(col, vec3<f32>(0.4545));
