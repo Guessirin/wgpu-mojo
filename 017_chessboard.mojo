@@ -103,7 +103,7 @@ fn boardMaterial(p: vec3<f32>, n: vec3<f32>) -> vec3<f32> {
 fn shade(frag_coord: vec2<f32>) -> vec3<f32> {
     let uv = frag_coord / U.resolution.xy;
  
-    let p_screen = (uv * 2.0 - 1.0) * vec2<f32>(U.resolution.x / U.resolution.y, -1.0);
+    let p_screen = -(uv * 2.0 - 1.0) * vec2<f32>(U.resolution.x / U.resolution.y, -1.0);
     
     let angle = U.time * 0.4;
     let ro = vec3<f32>(sin(angle) * 8.5, 5.5, cos(angle) * 8.5);
