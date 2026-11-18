@@ -110,10 +110,10 @@ fn map_knight(p: vec3<f32>) -> f32 {
     let collar = sdCappedCylinder(p - vec3<f32>(0.0, -0.55, 0.0), 0.1, 0.5);
     var d = smin(base, collar, 0.08);
 
-    let neck = sdCapsule(p, vec3<f32>(0.0, -0.5, -0.05), vec3<f32>(0.0, 0.45, 0.1), 0.32);
+    let neck = sdCapsule(p, vec3<f32>(0.0, -0.5, 0.05), vec3<f32>(0.0, 0.45, 0.1), 0.32);
     d = smin(d, neck, 0.15);
 
-    let head = sdCapsule(p, vec3<f32>(0.0, 0.45, 0.1), vec3<f32>(0.0, 0.25, -0.45), 0.22);
+    let head = sdCapsule(p, vec3<f32>(0.0, 0.45, 0.1), vec3<f32>(0.0, 0.25, 0.45), 0.22);
     d = smin(d, head, 0.12);
 
     let p_ear = vec3<f32>(abs(p.x), p.y, p.z);
