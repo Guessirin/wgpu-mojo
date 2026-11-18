@@ -155,7 +155,7 @@ fn fs_main(@builtin(position) frag: vec4<f32>) -> @location(0) vec4<f32> {
     let frag_coord = vec2<f32>(frag.x, U.resolution.y - frag.y);
 
     let uv = -(frag_coord - 0.5 * U.resolution.xy) / U.resolution.y;
-    let ro = vec3<f32>(0.0, 0.2, 3.6);
+    let ro = vec3<f32>(0.0, 0.2, 4.6);
     let rd = normalize(vec3<f32>(uv.x, -uv.y, -1.2));
     var t = 0.0;
     
