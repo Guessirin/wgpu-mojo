@@ -127,8 +127,12 @@ fn map(p: vec3<f32>) -> f32 {
     //q = rotateX(q, U.time * 0.5);
     //var q = rotateZ(p, 1.048);
     var q = rotateZ(p, 0.524);
+//    q = rotateX(p, 1.048);
+//    q = rotateX(p, 0.524);
     // Radius = 0.8, Half-depth = 0.25, slight bevel (-0.03)
-    return min((sdHexagon3D(q, 0.52, 1.25) - 0.03), (sdHexagon3D(q, 0.8, 0.25) - 0.03));
+//    return min((sdHexagon3D(q, 0.52, 1.25) - 0.03), (sdHexagon3D(q, 0.8, 0.25) - 0.03));
+//    return sdHexagon3D(q, 0.9, 0.065) - 0.03;
+    return min((sdHexagon3D(q, 0.87, 0.085) - 0.03), (sdHexagon3D(q, 0.9, 0.065) - 0.03));
 }
 
 fn calcNormal(p: vec3<f32>) -> vec3<f32> {
